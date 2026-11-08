@@ -174,8 +174,59 @@ namespace test_axiom
 opaque a : ℤ
 opaque b : ℤ
 axiom a_less_b :
-  a < b
+    a < b
 end test_axiom
 -- indent 2 >
+
+-- Chapter 3. Backward Proofs
+theorem fst_of_two_props :
+    ∀ a b : Prop, a → b → a :=
+  by
+    intro a b
+    intro ha hb
+    apply ha
+
+theorem fst_of_two_props_params (a b : Prop) (ha : a) (hb : b) :
+    a :=
+  by apply ha
+
+theorem prop_comp (a b c : Prop) (hab : a → b) (hbc : b → c) :
+    a → c :=
+  by
+    intro ha
+    apply hbc
+    apply hab
+    apply ha
+
+theorem And_swap (a b : Prop) :
+    a ∧ b → b ∧ a :=
+  by
+    intro hab
+    apply And.intro
+    apply And.right
+    exact hab
+    apply And.left
+    exact hab
+
+theorem And_swap_braces :
+    ∀ a b : Prop, a ∧ b → b ∧ a :=
+  by
+    intro a b hab
+    apply And.intro
+    . exact And.right hab
+    . exact And.left hab
+
+theorem f5_if (h : ∀ n : ℕ, f n = n) :
+    f 5 = 5 :=
+  by exact h 5
+
+theorem Or_swap (a b : Prop) :
+    a ∨ b → b ∨ a :=
+  by
+    intro hab
+    apply Or.elim
+    . exact hab
+    . exact Or.inr
+    . exact Or.inl
 end mine
 -- indent 1 >
