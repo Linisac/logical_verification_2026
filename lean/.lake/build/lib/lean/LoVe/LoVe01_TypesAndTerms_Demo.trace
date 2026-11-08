@@ -1,0 +1,67 @@
+{"synthetic": false,
+ "outputs":
+ {"o": ["10086377014062455496"],
+  "i": "5663076207855818766",
+  "c": "4895698227343782931"},
+ "log":
+ [{"message":
+   ".> LEAN_PATH=/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean /Users/Linisac/.elan/toolchains/leanprover--lean4---v4.24.0/bin/lean /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe01_TypesAndTerms_Demo.lean -o /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe01_TypesAndTerms_Demo.olean -i /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe01_TypesAndTerms_Demo.ilean -c /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe01_TypesAndTerms_Demo.c --setup /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe01_TypesAndTerms_Demo.setup.json --json",
+   "level": "trace"},
+  {"message": "LoVe/LoVe01_TypesAndTerms_Demo.lean:141:0: ℕ : Type",
+   "level": "info"},
+  {"message": "LoVe/LoVe01_TypesAndTerms_Demo.lean:142:0: ℤ : Type",
+   "level": "info"},
+  {"message": "LoVe/LoVe01_TypesAndTerms_Demo.lean:144:0: Empty : Type",
+   "level": "info"},
+  {"message": "LoVe/LoVe01_TypesAndTerms_Demo.lean:145:0: Unit : Type",
+   "level": "info"},
+  {"message": "LoVe/LoVe01_TypesAndTerms_Demo.lean:146:0: Bool : Type",
+   "level": "info"},
+  {"message": "LoVe/LoVe01_TypesAndTerms_Demo.lean:148:0: ℕ → ℤ : Type",
+   "level": "info"},
+  {"message": "LoVe/LoVe01_TypesAndTerms_Demo.lean:149:0: ℤ → ℕ : Type",
+   "level": "info"},
+  {"message": "LoVe/LoVe01_TypesAndTerms_Demo.lean:150:0: Bool → ℕ → ℤ : Type",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe01_TypesAndTerms_Demo.lean:151:0: (Bool → ℕ) → ℤ : Type",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe01_TypesAndTerms_Demo.lean:152:0: ℕ → (Bool → ℕ) → ℤ : Type",
+   "level": "info"},
+  {"message": "LoVe/LoVe01_TypesAndTerms_Demo.lean:154:0: fun x => x : ℕ → ℕ",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe01_TypesAndTerms_Demo.lean:155:0: fun f g h x => h (g (f x)) : (ℕ → ℕ) → (ℕ → ℕ) → (ℕ → ℕ) → ℕ → ℕ",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe01_TypesAndTerms_Demo.lean:157:0: fun f g h x => h (g (f x)) : (ℕ → ℕ) → (ℕ → ℕ) → (ℕ → ℕ) → ℕ → ℕ",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe01_TypesAndTerms_Demo.lean:166:0: fun x => g (f (g a x)) (g x b) : ℤ → ℤ",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe01_TypesAndTerms_Demo.lean:167:0: fun x => g (f (g a x)) (g x b) : ℤ → ℤ",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe01_TypesAndTerms_Demo.lean:169:0: fun x => x : ?m.1 → ?m.1",
+   "level": "info"}],
+ "inputs":
+ [["LoVe.LoVe01_TypesAndTerms_Demo:deps",
+   [["deps",
+     [["love/LoVe:extraDep", [["@love:extraDep", "1723"]]],
+      ["imports",
+       [["LoVe.LoVelib transitive imports (legacy)", "11989183081253910886"],
+        ["LoVe.LoVelib:importAllArts", "16837508327688803812"]]]]],
+    ["libs",
+     [["import dynlibs", "1723"],
+      ["package external libraries", "1723"],
+      ["module dynlibs", "1723"],
+      ["module plugins", "1723"]]]]],
+  ["Lean 4.24.0, commit 797c613eb9b6d4ec95db23e3e00af9ac6657f24b",
+   "1165570713881806064"],
+  ["/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe01_TypesAndTerms_Demo.lean",
+   "16139104362543589660"],
+  ["options", "1723"],
+  ["Module.leanArgs: #[]", "1723"]],
+ "depHash": "8674359502857109900"}

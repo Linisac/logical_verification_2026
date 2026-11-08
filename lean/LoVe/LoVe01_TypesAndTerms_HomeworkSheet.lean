@@ -38,22 +38,22 @@ constructing a term. By hovering over `_`, you will see the current logical
 context. -/
 
 def B : (α → β) → (γ → α) → γ → β :=
-  sorry
+  fun h f c ↦ h (f c)
 
 def S : (α → β → γ) → (α → β) → α → γ :=
-  sorry
+  fun f g a ↦ f a (g a)
 
 def nonsense1 : (γ → (α → β) → α) → γ → β → α :=
-  sorry
+  fun f c b ↦ f c (fun _ ↦ b)
 
 def nonsense2 : (α → α → β) → (β → γ) → α → β → γ :=
-  sorry
+  fun f g a b ↦ g b
 
 def nonsense3 : ((α → β) → γ → δ) → γ → β → δ :=
-  sorry
+  fun f c b ↦ f (fun _ ↦ b) c
 
 def nonsense4 : (α → β) → (α → γ) → α → β → γ :=
-  sorry
+  fun f g a b ↦ g a
 
 /- 1.2. Complete the following definition.
 
@@ -63,7 +63,7 @@ follow the procedure described in the Hitchhiker's Guide.
 Note: Peirce is pronounced like the English word "purse". -/
 
 def weakPeirce : ((((α → β) → α) → α) → β) → β :=
-  sorry
+  fun f ↦ f (fun g ↦ g (fun a ↦ f (fun _ ↦ a)))
 
 /- ## Question 2: Typing Derivation
 
@@ -73,11 +73,30 @@ draw horizontal bars) and `⊢` useful.
 
 Feel free to introduce abbreviations to avoid repeating large contexts `C`. -/
 
--- write your solution here
+/-
+1. (Var) h : (α → β), f : (γ → α), c : γ ⊢ f : (γ → α)
+2. (Var) h : (α → β), f : (γ → α), c : γ ⊢ c : γ
+3. (Var) h : (α → β), f : (γ → α), c : γ ⊢ h : (α → β)
+4. (App to 1. and 2.) h : (α → β), f : (γ → α), c : γ ⊢ f c : α
+5. (App to 3. and 4.) h : (α → β), f : (γ → α), c : γ ⊢ h (f c) : β
+6. (Fun to 5.) h : (α → β), f : (γ → α) ⊢ (fun c : γ ↦ h (f c)) : γ → β
+7. (Fun to 6.) h : (α → β) ⊢ (fun f : (γ → α) ↦ fun c : γ ↦ h (f c)) : (γ → α) → γ → β
+8. (Fun to 7.) ⊢ (fun h : (α → β) ↦ fun f : (γ → α) ↦ fun c : γ ↦ h (f c)) : (α → β) → (γ → α) → γ → β
+-/
 
 /- 2.2. Show the typing derivation for your definition of `S` above, using
 ASCII or Unicode art. Start with an empty context. -/
 
--- write your solution here
+/-
+1. (Var) f : (α → β → γ), g : (α → β), a : α ⊢ f : (α → β → γ)
+2. (Var) f : (α → β → γ), g : (α → β), a : α ⊢ g : (α → β)
+3. (Var) f : (α → β → γ), g : (α → β), a : α ⊢ a : α
+4. (App to 1. and 3.) f : (α → β → γ), g : (α → β), a : α ⊢ f a : β → γ
+5. (App to 2. and 3.) f : (α → β → γ), g : (α → β), a : α ⊢ g a : β
+6. (App to 4. and 5.) f : (α → β → γ), g : (α → β), a : α ⊢ f a (g a) : γ
+7. (Fun to 6.) f : (α → β → γ), g : (α → β) ⊢ (fun a : α ↦ f a (g a)) : α → γ
+8. (Fun to 7.) f : (α → β → γ) ⊢ (fun g : (α → β) ↦ fun a : α ↦ f a (g a)) : (α → β) → α → γ
+9. (Fun to 8.) ⊢ (fun f : (α → β → γ) ↦ fun g : (α → β) ↦ fun a : α ↦ f a (g a)) : (α → β → γ) → (α → β) → α → γ
+-/
 
 end LoVe

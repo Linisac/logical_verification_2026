@@ -1,0 +1,123 @@
+{"synthetic": false,
+ "outputs":
+ {"o": ["11860599432506327768"],
+  "i": "8728279374546723359",
+  "c": "12291895057422789945"},
+ "log":
+ [{"message":
+   ".> LEAN_PATH=/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean /Users/Linisac/.elan/toolchains/leanprover--lean4---v4.24.0/bin/lean /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe02_ProgramsAndTheorems_Demo.lean -o /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe02_ProgramsAndTheorems_Demo.olean -i /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe02_ProgramsAndTheorems_Demo.ilean -c /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe02_ProgramsAndTheorems_Demo.c --setup /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe02_ProgramsAndTheorems_Demo.setup.json --json",
+   "level": "trace"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:40:0: LoVe.MyNat.Nat : Type",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:41:0: LoVe.MyNat.Nat.zero : Nat",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:42:0: LoVe.MyNat.Nat.succ : Nat → Nat",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:46:0: inductive LoVe.MyNat.Nat : Type\nnumber of parameters: 0\nconstructors:\nLoVe.MyNat.Nat.zero : Nat\nLoVe.MyNat.Nat.succ : Nat → Nat",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:53:0: inductive Nat : Type\nnumber of parameters: 0\nconstructors:\nNat.zero : ℕ\nNat.succ : ℕ → ℕ",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:54:0: inductive LoVe.MyNat.Nat : Type\nnumber of parameters: 0\nconstructors:\nLoVe.MyNat.Nat.zero : MyNat.Nat\nLoVe.MyNat.Nat.succ : MyNat.Nat → MyNat.Nat",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:76:0: LoVe.MyList.List (α : Type) : Type",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:77:0: LoVe.MyList.List.nil {α : Type} : List α",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:78:0: LoVe.MyList.List.cons {α : Type} : α → List α → List α",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:79:0: inductive LoVe.MyList.List : Type → Type\nnumber of parameters: 1\nconstructors:\nLoVe.MyList.List.nil : {α : Type} → List α\nLoVe.MyList.List.cons : {α : Type} → α → List α → List α",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:83:0: inductive List.{u} : Type u → Type u\nnumber of parameters: 1\nconstructors:\nList.nil : {α : Type u} → List α\nList.cons : {α : Type u} → α → List α → List α",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:84:0: inductive LoVe.MyList.List : Type → Type\nnumber of parameters: 1\nconstructors:\nLoVe.MyList.List.nil : {α : Type} → MyList.List α\nLoVe.MyList.List.cons : {α : Type} → α → MyList.List α → MyList.List α",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:106:0: 9",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:107:0: 9",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:113:0: 14",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:115:0: def LoVe.mul : ℕ → ℕ → ℕ :=\nfun x x_1 =>\n  Nat.brecOn (motive := fun x => ℕ → ℕ) x_1\n    (fun x f x_2 =>\n      (match (motive := ℕ → (x : ℕ) → Nat.below (motive := fun x => ℕ → ℕ) x → ℕ) x_2, x with\n        | m, Nat.zero => fun x => Nat.zero\n        | m, n.succ => fun x => add m (x.1 m))\n        f)\n    x",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:121:0: 32",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:133:0: 32",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:139:0: LoVe.iter (α : Type) (z : α) (f : α → α) : ℕ → α",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:144:0: 32",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:154:0: LoVe.append (α : Type) : List α → List α → List α",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:155:0: [3, 1, 4, 1, 5]",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:156:0: [3, 1, 4, 1, 5]",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:165:0: [3, 1, 4, 1, 5]",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:172:0: @appendImplicit : {α : Type} → List α → List α → List α",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:173:0: [3, 1, 4, 1, 5]",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:174:0: [3, 1, 4, 1, 5]",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:198:0: 0",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:212:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:216:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:220:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:224:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:228:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_Demo.lean:232:8: declaration uses 'sorry'",
+   "level": "warning"}],
+ "inputs":
+ [["LoVe.LoVe02_ProgramsAndTheorems_Demo:deps",
+   [["deps",
+     [["love/LoVe:extraDep", [["@love:extraDep", "1723"]]],
+      ["imports",
+       [["LoVe.LoVelib transitive imports (legacy)", "11989183081253910886"],
+        ["LoVe.LoVelib:importAllArts", "16837508327688803812"]]]]],
+    ["libs",
+     [["import dynlibs", "1723"],
+      ["package external libraries", "1723"],
+      ["module dynlibs", "1723"],
+      ["module plugins", "1723"]]]]],
+  ["Lean 4.24.0, commit 797c613eb9b6d4ec95db23e3e00af9ac6657f24b",
+   "1165570713881806064"],
+  ["/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe02_ProgramsAndTheorems_Demo.lean",
+   "3770051784077294830"],
+  ["options", "1723"],
+  ["Module.leanArgs: #[]", "1723"]],
+ "depHash": "10243605315235254354"}

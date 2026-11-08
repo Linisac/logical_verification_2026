@@ -25,8 +25,9 @@ its argument, or 0 if the argument is 0. For example:
     `pred 7 = 6`
     `pred 0 = 0` -/
 
-def pred : ℕ → ℕ :=
-  sorry
+def pred : ℕ → ℕ
+  | 0 => 0
+  | n + 1 => n
 
 /- 1.2. Check that your function works as expected. -/
 
@@ -55,6 +56,8 @@ computes the value of an expression. You will find the definitions in the file
 constructor at least once. You can use the following environment in your tests.
 What happens if you divide by zero?
 
+Answer: 0
+
 Note that `#eval` (Lean's evaluation command) and `eval` (our evaluation
 function on `AExp`) are unrelated. -/
 
@@ -62,6 +65,25 @@ def someEnv : String → ℤ
   | "x" => 3
   | "y" => 17
   | _   => 201
+
+def aexp_0 : AExp := AExp.num 0
+def aexp_5 : AExp := AExp.num 5
+def aexp_x : AExp := AExp.var "x"
+def aexp_y : AExp := AExp.var "y"
+def aexp_z : AExp := AExp.var "z"
+def aexp_add_xy : AExp := AExp.add aexp_x aexp_y
+def aexp_sub_yz : AExp := AExp.sub aexp_y aexp_z
+def aexp_mul_z5 : AExp := AExp.mul aexp_z aexp_5
+def aexp_div_50 : AExp := AExp.div aexp_5 aexp_0
+#eval eval someEnv aexp_0
+#eval eval someEnv aexp_5
+#eval eval someEnv aexp_x
+#eval eval someEnv aexp_y
+#eval eval someEnv aexp_z
+#eval eval someEnv aexp_add_xy
+#eval eval someEnv aexp_sub_yz
+#eval eval someEnv aexp_mul_z5
+#eval eval someEnv aexp_div_50
 
 #eval eval someEnv (AExp.var "x")   -- expected: 3
 -- invoke `#eval` here
@@ -74,7 +96,14 @@ operators. -/
 def simplify : AExp → AExp
   | AExp.add (AExp.num 0) e₂ => simplify e₂
   | AExp.add e₁ (AExp.num 0) => simplify e₁
-  -- insert the missing cases here
+  | AExp.sub e₁ (AExp.num 0) => simplify e₁
+  | AExp.mul (AExp.num 0) _  => AExp.num 0
+  | AExp.mul _ (AExp.num 0)  => AExp.num 0
+  | AExp.mul (AExp.num 1) e₂ => simplify e₂
+  | AExp.mul e₁ (AExp.num 1) => simplify e₁
+  | AExp.div (AExp.num 0) _  => AExp.num 0
+  | AExp.div _ (AExp.num 0)  => AExp.num 0
+  | AExp.div e₁ (AExp.num 1) => simplify e₁
   -- catch-all cases below
   | AExp.num i               => AExp.num i
   | AExp.var x               => AExp.var x
@@ -93,7 +122,7 @@ the property that the value of `e` after simplification is the same as the
 value of `e` before. -/
 
 theorem simplify_correct (env : String → ℤ) (e : AExp) :
-    True :=   -- replace `True` by your theorem statement
+    eval env (simplify e) = eval env e :=   -- replace `True` by your theorem statement
   sorry   -- leave `sorry` alone
 
 
@@ -102,8 +131,9 @@ theorem simplify_correct (env : String → ℤ) (e : AExp) :
 3.1 (**optional**). Define a generic `map` function that applies a function to
 every element in a list. -/
 
-def map {α : Type} {β : Type} (f : α → β) : List α → List β :=
-  sorry
+def map {α : Type} {β : Type} (f : α → β) : List α → List β
+  | []      => []
+  | x :: xs => f x :: map f xs
 
 #eval map (fun n ↦ n + 10) [1, 2, 3]   -- expected: [11, 12, 13]
 
@@ -117,5 +147,11 @@ Try to give meaningful names to your theorems. Also, make sure to state the
 second property as generally as possible, for arbitrary types. -/
 
 -- enter your theorem statements here
+theorem map_id {α : Type} (xs : List α) :
+    map (fun x ↦ x) xs = xs :=
+  sorry
 
+theorem map_comp {α : Type} {β : Type} {γ : Type} (f : α → β) (g : β → γ) (xs : List α) :
+    map (fun x ↦ g (f x)) xs = map g (map f xs) :=
+  sorry
 end LoVe

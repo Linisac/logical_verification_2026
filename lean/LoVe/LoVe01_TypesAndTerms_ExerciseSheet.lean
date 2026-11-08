@@ -34,18 +34,19 @@ def K : α → β → α :=
   fun a b ↦ a
 
 def C : (α → β → γ) → β → α → γ :=
-  sorry
+  fun f b a => f a b
 
 def projFst : α → α → α :=
-  sorry
+  fun a b => a
 
 /- Give a different answer than for `projFst`. -/
 
 def projSnd : α → α → α :=
-  sorry
+  fun a => fun b => b
 
 def someNonsense : (α → β → γ) → α → (α → γ) → β → γ :=
-  sorry
+  fun f a g b => g a
+  -- alternatively: fun f a g b => f a b
 
 
 /- ## Question 2: Typing Derivation
@@ -54,6 +55,15 @@ Show the typing derivation for your definition of `C` above, on paper or using
 ASCII or Unicode art. Start with an empty context. You might find the
 characters `–` (to draw horizontal bars) and `⊢` useful. -/
 
--- write your solution in a comment here or on paper
+/-
+1. (Var) f : (α → β → γ), b : β, a : α ⊢ f : (α → β → γ)
+2. (Var) f : (α → β → γ), b : β, a : α ⊢ a : α
+3. (Var) f : (α → β → γ), b : β, a : α ⊢ b : β
+4. (App to 1. and 2.) f : (α → β → γ), b : β, a : α ⊢ f a : β → γ
+5. (App to 4. and 3.) f : (α → β → γ), b : β, a : α ⊢ f a b : γ
+6. (Fun to 5.) f : (α → β → γ), b : β ⊢ (fun a : α ↦ f a b) : α → γ
+7. (Fun to 6.) f : (α → β → γ) ⊢ (fun b : β ↦ fun a : α ↦ f a b) : β → α → γ
+8. (Fun to 7.) ⊢ (fun f : (α → β → γ) ↦ fun b : β ↦ fun a : α ↦ f a b) : (α → β → γ) → β → α → γ
+-/
 
 end LoVe

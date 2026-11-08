@@ -1,0 +1,89 @@
+{"synthetic": false,
+ "outputs":
+ {"o": ["2065665323976936170"],
+  "i": "2581012410707202046",
+  "c": "13586492164843916255"},
+ "log":
+ [{"message":
+   ".> LEAN_PATH=/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean /Users/Linisac/.elan/toolchains/leanprover--lean4---v4.24.0/bin/lean /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean -o /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.olean -i /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.ilean -c /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.c --setup /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.setup.json --json",
+   "level": "trace"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:33:0: [1, 2]",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:34:0: [1]",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:35:0: [1, 2, 3]",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:51:0: 0",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:52:0: 0",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:53:0: 0",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:54:0: 1",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:55:0: 2",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:56:0: 3",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:68:0: 16",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:79:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:83:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:87:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:102:0: inductive List.{u} : Type u → Type u\nnumber of parameters: 1\nconstructors:\nList.nil : {α : Type u} → List α\nList.cons : {α : Type u} → α → List α → List α",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:103:0: LoVe.append (α : Type) : List α → List α → List α",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:104:0: LoVe.reverse {α : Type} : List α → List α",
+   "level": "info"},
+  {"message": "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:111:0: []",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:112:0: [5, 3, 1]",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:114:0: [1, 0, -1]",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:115:0: [\"d\", \"c\", \"b\", \"a\"]",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:127:0: LoVe.SorryTheorems.reverse_reverse {α : Type} (xs : List α) : reverse (reverse xs) = xs",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:130:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean:134:8: declaration uses 'sorry'",
+   "level": "warning"}],
+ "inputs":
+ [["LoVe.LoVe02_ProgramsAndTheorems_HomeworkSheet:deps",
+   [["deps",
+     [["love/LoVe:extraDep", [["@love:extraDep", "1723"]]],
+      ["imports",
+       [["LoVe.LoVe02_ProgramsAndTheorems_Demo transitive imports (legacy)",
+         "9895513060103838294"],
+        ["LoVe.LoVe02_ProgramsAndTheorems_Demo:importAllArts",
+         "14818584163470755899"]]]]],
+    ["libs",
+     [["import dynlibs", "1723"],
+      ["package external libraries", "1723"],
+      ["module dynlibs", "1723"],
+      ["module plugins", "1723"]]]]],
+  ["Lean 4.24.0, commit 797c613eb9b6d4ec95db23e3e00af9ac6657f24b",
+   "1165570713881806064"],
+  ["/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe02_ProgramsAndTheorems_HomeworkSheet.lean",
+   "9176192319513065370"],
+  ["options", "1723"],
+  ["Module.leanArgs: #[]", "1723"]],
+ "depHash": "19517069160796977"}
