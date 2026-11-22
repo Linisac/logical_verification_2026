@@ -219,3 +219,236 @@ sheet asks for `mul_zero` and `mul_succ` before `mul_comm`.
 - Q3 (optional, recommended for you as a logician): EM → Peirce → DN,
   without `Classical`.
 Build with `lake build LoVe.LoVe03_BackwardProofs_ExerciseSheet`.
+
+---
+
+**2026-11-22**
+
+### Review of the chapter 3 homework sheet
+
+Builds clean and `sorry`-free. `#print axioms` on `EM_of_DN`,
+`EM_of_Peirce`, `Peirce_of_DN`, `DN_of_EM`, `herman` and `weak_peirce`
+reports **no axioms at all**: no `sorryAx`, no `Classical.choice`, no
+`propext`. So the whole EM/Peirce/DN equivalence was proved
+intuitionistically, as the sheet intends. The ch.3 exercise sheet is also
+`sorry`-free.
+
+- `EM_of_DN`: the standard proof, with the key move of using
+  `hnaa : ¬(a ∨ ¬a)` twice. The part after `apply dn` is an intuitionistic
+  proof of `¬¬(a ∨ ¬a)`. `herman` (`¬¬(¬¬a → a)`) is the same phenomenon:
+  the double negation of each classical principle's instance is
+  intuitionistically provable (Glivenko-style). `dn` itself is used only once.
+- 2.4: each missing implication is a composite of two of the three base
+  theorems, so the reasoning isn't circular.
+- Style nits: the standard bullet is `·` (Lean also accepts `.`). Unused
+  intro'd hypotheses (`haba'` in `weak_peirce`, `hnna'` in `herman`) are
+  conventionally named `_`. `rw [Not]` / `rw [Not] at h` are never needed,
+  since `¬p` is definitionally `p → False`, so `intro`/`apply`/`exact` see
+  through it. `S` could be one line: `exact habc ha (hab ha)`.
+
+### Q&A: typing `·`
+
+In the Lean VS Code extension, type `\.` (or `\cdot`), followed by a space or
+Tab, and it turns into `·`. This was verified against the abbreviation table
+in the installed extension v0.0.242. System-wide on a US macOS keyboard,
+Option+Shift+9 also gives `·` (U+00B7). Lean also accepts plain `.` as a
+bullet.
+
+### Q&A: does `herman` illustrate "classical ⇒ ¬¬ intuitionistic"?
+
+Yes, but only for **propositional** logic. That's **Glivenko's theorem**: if
+`P` is a classical *propositional* tautology, then `¬¬P` is intuitionistically
+provable. `herman` (`¬¬(¬¬a → a)`) and the inner part of `EM_of_DN`
+(`¬¬(a ∨ ¬a)`) are instances of it, each checked in Lean without axioms.
+The usual proof shape: assume `¬P`, then use that hypothesis to refute
+both the "positive" and the "negative" way `P` could hold. That's why `hnaa`
+was used twice.
+
+It **fails once quantifiers are involved**. `∀x, ¬¬(p x ∨ ¬p x)` is
+intuitionistically provable, but moving the `¬¬` outside the `∀`
+(`¬¬∀x, (p x ∨ ¬p x)`) needs the double-negation shift, which isn't
+intuitionistically valid in general. Note that the sheet's
+`ExcludedMiddle := ∀a : Prop, a ∨ ¬a` *is* such a quantified statement, so
+Glivenko does not give you `¬¬ExcludedMiddle`. Only each instance is
+covered. The uniform fix for first-order logic is a negative translation
+(Gödel–Gentzen, or Kuroda's, which inserts `¬¬` after every `∀`) instead of
+a single outer `¬¬`.
+
+### Review of the chapter 3 exercise sheet
+
+Builds clean and `sorry`-free. `Peirce_of_EM`, `DN_of_Peirce` and
+`forall_and` use no axioms.
+
+- **`proj_fst'` is actually the second projection.** `#print` shows
+  `fun a ha => I a`, and `I a : a → a` returns the *second* argument. So
+  it's `proj_snd` in disguise, not a variant of `proj_fst`. (The sheet's
+  "different answer" request applies to `proj_snd`, which you did solve
+  properly.) In `Prop` all proofs of the same statement are equal anyway
+  (proof irrelevance, ch.12), so "different" only means a different proof
+  *term*.
+- `some_nonsense''` (intro only three, then `apply habc; exact ha`) is a
+  nice η-reduced proof term `fun … ↦ habc ha`.
+- `forall_and`: correct. Right-to-left uses `apply And.left hallpallq`,
+  which unifies `∀x, p x` with `p x`. That's the forward step the hint
+  meant.
+- Q2: all correct. `add_mul` by `rw [mul_comm _ n, mul_add]` is exactly the
+  intended "instantiate to aim the rewrite" trick: `mul ?x n` only matches
+  the right-hand side's `mul (add l m) n`. `mul_comm` depends on `propext`
+  and `Quot.sound` (introduced by `simp`). Those are *not* classical
+  axioms; only `Classical.choice` is (ch.12).
+- Layout nit: the usual Lean style for a multi-tactic case is to start a
+  new line after `=>` and indent, rather than aligning continuation lines
+  under the first tactic.
+- You also filled in `SorryTheorems.EM_of_DN`, which is harmless and
+  matches your homework proof.
+
+---
+
+**2026-11-23**
+
+### Re-check of the chapter 3 exercise sheet
+
+Builds clean. Layout fixed (new line after `=>`) ✔. Unused hypotheses now
+`_` ✔. **But `proj_fst'` is *still* the second projection.** The new proof
+`intro ha _; assumption` elaborates to `fun a ha a✝ => a✝`, confirmed
+with `set_option pp.raw true`. Two Lean mechanics explain it:
+
+1. `intro _` does **not** discard the hypothesis. It stays in the context
+   with an *inaccessible* name `a✝` (shown as `ha a✝ : a`). You can't
+   refer to it by name, but automation can still use it.
+2. `assumption` searches the context **from the most recent hypothesis
+   backwards**, so it picks `a✝` (the second argument) before `ha`.
+
+Moral: `assumption`, `simp`, etc. may choose a *different* proof than the
+one you intend. In `Prop` that never matters for correctness (proof
+irrelevance), but it does matter when, as here, the exercise is about which
+term you build. `#print` shows you what you actually built.
+
+- Second re-check: `proj_fst'` = `intro ha _; apply ha` now elaborates to
+  `fun a ha _ => ha`, the first projection ✔. Note that this is the
+  *identical* term to `proj_fst`'s (`exact ha`). Different tactics can
+  build the same term. A genuinely different term would route through a
+  lemma, e.g. `fun a ha _ => I a ha`. Optional; the sheet's actual
+  requirement is met by `proj_snd`. **Ch.3 exercise sheet closed.**
+
+---
+
+**2026-11-23**
+
+## Chapter 4: Forward Proofs
+
+(Book pp.37–54.) The chapter has two halves. The structured-proof syntax
+(`fix`/`assume`/`have`/`show`/`calc`) is mechanical. Dependent types and
+the **PAT principle** (§4.6–4.8) are the conceptual core, so slow down there.
+Every behavioural claim below was checked with this repo's toolchain.
+
+### 1. PAT, compared with what you already know
+
+**Coming from Agda:** you already work with propositions-as-types, so
+nothing is new in principle. Two Lean-specific differences matter:
+- **`Prop` is impredicative.** `∀ a : Prop, a → a` has type `Prop`, even
+  though it quantifies over all of `Prop`. Compare
+  `(α : Type) → α → α : Type 1`, which is predicative and goes up a
+  universe, as in Agda's `Set`. This is why ch.3's
+  `ExcludedMiddle := ∀a : Prop, a ∨ ¬a` was an ordinary proposition you
+  could assume and prove things about.
+- **Proof irrelevance:** any two proofs of the same `P : Prop` are
+  definitionally equal (ch.12). That's why `theorem` bodies are opaque,
+  and why the "different proof of `proj_fst`" exercise was only about
+  syntax.
+
+**Coming from HOL4:** this is the real shift.
+- In LCF-style HOL4, a theorem is a value of the abstract ML type `thm`.
+  Proofs are *not* objects of the logic, and soundness comes from the
+  inference rules being `thm`'s only constructors.
+- In Lean, a **proof is a term of the logic**, and the kernel is just a
+  **type checker**. Tactics are untrusted programs that output a term,
+  which the kernel re-checks: a small checker verifies every proof (the
+  de Bruijn criterion), instead of trust coming from an abstract type.
+- HOL's `∀` is a constant applied to a λ-abstraction. Lean's `∀` is
+  *the dependent function type itself*: `∀x : σ, Q x` **is**
+  `(x : σ) → Q x`. (`#check (n : ℕ) → n = n` prints `∀ (n : ℕ), n = n`.)
+- That's the reason, promised in ch.3, that `→` and `∀` have no named
+  intro/elim rules. Introduction is `fun` (rule Fun′) and elimination is
+  application (rule App′). Modus ponens is `hab ha`, and instantiation is
+  `h 5`.
+
+**The dictionary (book §4.7 table), read as term constructors:**
+
+| tactic        | structured               | raw term          |
+|---------------|--------------------------|-------------------|
+| `intro x`     | `fix x : σ`              | `fun x ↦ …`       |
+| `intro h`     | `assume h : P`           | `fun h ↦ …`       |
+| `have k := H` | `have k : Q := H`        | `(fun k ↦ …) H`   |
+| `exact H`     | `show P from H`          | `(H : P)`         |
+
+So a structured proof is a proof term with readable syntax. `#print` your
+ch.3 tactic proofs next to your ch.4 structured ones: they should often
+produce the *same* term.
+
+### 2. Dependent types: the ch.1 rules, generalized
+
+Fun′ and App′ are ch.1's Fun/App with the codomain allowed to mention the
+bound variable: `(x : σ) → τ[x]`, and application substitutes, giving
+`τ[u]`. `σ → τ` is just `(_ : σ) → τ`. This also finishes the
+well-typed/well-formed discussion: the types on the right of `:` are
+checked by the same rules.
+
+### 3. Mechanical gotchas (all verified)
+
+- **`fix` and `assume` exist only in LoVelib**, as macros that expand to
+  `fun x : σ ↦ …`. Standard Lean writes `fun` (or `intro` in tactics). In
+  this LoVelib:
+  - the **type annotation is mandatory** (`fix x; …` is a parse error,
+    "expected ':'"), despite the book saying types are often omitted;
+  - **`assume` takes exactly one name** (`assume ha hb : a` fails), while
+    `fix x y : σ` may bind several names of the same type.
+- **Layout:** each `fix`/`assume`/`have` line must be followed by a line
+  break or `;`. Wrap subproofs passed as arguments in parentheses, as in
+  the book's `Iff.intro (assume … ) (assume … )`.
+- **`have` forgets, `let` remembers.** `let n := 2` followed by
+  `(rfl : n = 2)` checks, but `have n := 2` followed by the same thing
+  fails, because `n` is opaque. It's the same distinction as
+  `theorem`/`def`. Use `have` for proofs and `let` for data.
+- **`show P from H`** may restate the goal *up to computation*, e.g. a
+  `¬a` goal can be shown as `a → False`.
+- **`calc`:** `calc a = b := proof₁` then `_ = c := proof₂`, where the `_`
+  stands for the previous right-hand side. `=`, `≤`, `<` can be mixed.
+  `calc`, `have` and `let` also work as **tactics** inside `by`, so you
+  can mix forward and backward steps.
+- **Precedence (useful for Q2.1):** `2 * a * b` parses as
+  `(2 * a) * b`. `*` and `+` associate to the left.
+
+### 4. Induction by pattern matching = a recursive proof term
+
+```lean
+theorem reverse_append {α : Type} : ∀xs ys : List α, … 
+  | [], ys      => …
+  | x :: xs, ys => … reverse_append xs …   -- the IH is the theorem itself
+```
+
+By PAT, an inductive proof *is* a recursive function into proofs. The
+"induction hypothesis" is a recursive call, and Lean's termination checker
+plays the role of the induction principle. A circular call is rejected:
+`| n + 1 => bad (n + 1)` gives "fail to show termination … failed to
+eliminate recursive application". Structural recursion compiles to the
+recursor (`Nat.brecOn`, which you saw in `#print mul`'s output). This is
+more flexible than `induction` (matching several arguments at once,
+well-founded recursion), but it isn't available for inductive predicates
+(ch.6).
+
+**∃ in structured style:** `Exists.intro t proof` introduces, and
+`Exists.elim hex (fix x : α; assume hx : P x; …)` eliminates. The
+elimination rule takes a *function* (a ∀-proof) as its second argument.
+That's PAT again.
+
+**Task:** `lean/LoVe/LoVe04_ForwardProofs_ExerciseSheet.lean`.
+- Q1: structured proofs of ch.3's Q1 theorems, plus `forall_and`; 1.4 is
+  optional. Compare `#print`s against your ch.3 versions.
+- Q2: `binomial_square` by `calc`. The sheet says it's hard; mind the
+  precedence point above.
+- Q3 (optional, recommended for a logician): derive `False` from two
+  *wrongly stated* one-point-rule axioms. It's a concrete demonstration of
+  why `axiom` (and `sorry`) can make the logic inconsistent.
+
+Build with `lake build LoVe.LoVe04_ForwardProofs_ExerciseSheet`.

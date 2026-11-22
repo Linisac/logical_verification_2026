@@ -29,35 +29,77 @@ Section 3.3 in the Hitchhiker's Guide. -/
 
 theorem I (a : Prop) :
     a → a :=
-  sorry
+  by
+    intro ha
+    exact ha
 
 theorem K (a b : Prop) :
     a → b → b :=
-  sorry
+  by
+    intro ha hb
+    exact hb
 
 theorem C (a b c : Prop) :
     (a → b → c) → b → a → c :=
-  sorry
+  by
+    intro habc hb ha
+    apply habc
+    . exact ha
+    . exact hb
 
 theorem proj_fst (a : Prop) :
     a → a → a :=
-  sorry
+  by
+    intro ha _
+    exact ha
 
 /- Please give a different answer than for `proj_fst`: -/
 
+theorem proj_fst' (a : Prop) :
+    a → a → a :=
+  by
+    exact fun ha _ => I a ha
+    --alternatively:
+    --intro ha
+    --exact fun _ => ha
+
+#print proj_fst'
+
 theorem proj_snd (a : Prop) :
     a → a → a :=
-  sorry
+  by
+    intro _ ha'
+    exact ha'
 
 theorem some_nonsense (a b c : Prop) :
     (a → b → c) → a → (a → c) → b → c :=
-  sorry
+  by
+    intro habc ha hac hb
+    apply hac
+    exact ha
+
+theorem some_nonsense' (a b c : Prop) :
+    (a → b → c) → a → (a → c) → b → c :=
+  by
+    intro habc ha hac hb
+    apply habc
+    . exact ha
+    . exact hb
+
+theorem some_nonsense'' (a b c : Prop) :
+    (a → b → c) → a → (a → c) → b → c :=
+  by
+    intro habc ha _
+    exact habc ha
 
 /- 1.2. Prove the contraposition rule using basic tactics. -/
 
 theorem contrapositive (a b : Prop) :
     (a → b) → ¬ b → ¬ a :=
-  sorry
+  by
+    intro hab hnb ha
+    apply hnb
+    apply hab ha
 
 /- 1.3. Prove the distributivity of `∀` over `∧` using basic tactics.
 
@@ -67,8 +109,21 @@ be necessary. -/
 
 theorem forall_and {α : Type} (p q : α → Prop) :
     (∀x, p x ∧ q x) ↔ (∀x, p x) ∧ (∀x, q x) :=
-  sorry
-
+  by
+    apply Iff.intro
+    . intro hallpq
+      apply And.intro
+      . intro x
+        apply And.left
+        apply hallpq x
+      . intro x
+        apply And.right
+        apply hallpq x
+    . intro hallpallq
+      intro x
+      apply And.intro
+      . apply And.left hallpallq
+      . apply And.right hallpallq
 
 /- ## Question 2: Natural Numbers
 
@@ -76,26 +131,46 @@ theorem forall_and {α : Type} (p q : α → Prop) :
 `mul` operator defined in lecture 1. -/
 
 #check mul
+#print mul
 
 theorem mul_zero (n : ℕ) :
     mul 0 n = 0 :=
-  sorry
+  by
+    induction n with
+    | zero => rfl
+    | succ n' ih =>
+      simp [mul, ih]
+      rfl
 
-#check add_succ
 theorem mul_succ (m n : ℕ) :
     mul (Nat.succ m) n = add (mul m n) n :=
-  sorry
+  by
+    induction n with
+    | zero => rfl
+    | succ n' ih =>
+      simp [mul, ih, add, add_succ]
+      ac_rfl
 
 /- 2.2. Prove commutativity and associativity of multiplication using the
 `induction` tactic. Choose the induction variable carefully. -/
 
 theorem mul_comm (m n : ℕ) :
     mul m n = mul n m :=
-  sorry
+  by
+    induction n with
+    | zero =>
+      simp [mul_zero]
+      rfl
+    | succ n' ih =>
+      simp [mul_succ, ← ih, add_comm]
+      rfl
 
 theorem mul_assoc (l m n : ℕ) :
     mul (mul l m) n = mul l (mul m n) :=
-  sorry
+  by
+    induction n with
+    | zero => rfl
+    | succ n' ih => simp [mul, ih, mul_add]
 
 /- 2.3. Prove the symmetric variant of `mul_add` using `rw`. To apply
 commutativity at a specific position, instantiate the rule by passing some
@@ -103,8 +178,8 @@ arguments (e.g., `mul_comm _ l`). -/
 
 theorem add_mul (l m n : ℕ) :
     add (mul n l) (mul n m) = mul (add l m) n :=
-  sorry
-
+  by
+    rw [mul_comm _ n, mul_add]
 
 /- ## Question 3 (**optional**): Intuitionistic Logic
 
@@ -132,13 +207,36 @@ and similarly for `Peirce`. -/
 
 theorem Peirce_of_EM :
     ExcludedMiddle → Peirce :=
-  sorry
+  by
+    intro em
+    rw [ExcludedMiddle] at em
+    rw [Peirce]
+    intro a b
+    apply Or.elim (em a)
+    . intro ha haba
+      exact ha
+    . intro hna haba
+      apply haba
+      intro ha
+      apply False.elim
+      exact hna ha
 
 /- 3.2 (**optional**). Prove the following implication using tactics. -/
 
 theorem DN_of_Peirce :
     Peirce → DoubleNegation :=
-  sorry
+  by
+    intro prc
+    rw [Peirce] at prc
+    rw [DoubleNegation]
+    intro a hnna
+    rw [Not] at hnna
+    apply prc a False
+    intro hna
+    apply False.elim
+    apply hnna
+    rw [Not]
+    exact hna
 
 /- We leave the remaining implication for the homework: -/
 
@@ -146,7 +244,17 @@ namespace SorryTheorems
 
 theorem EM_of_DN :
     DoubleNegation → ExcludedMiddle :=
-  sorry
+  by
+    rw [DoubleNegation, ExcludedMiddle]
+    intro dn a
+    apply dn
+    intro hnaa
+    apply hnaa
+    apply Or.inr
+    intro ha
+    apply hnaa
+    apply Or.inl
+    exact ha
 
 end SorryTheorems
 
