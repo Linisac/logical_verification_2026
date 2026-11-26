@@ -503,6 +503,5 @@ instance Commutative_mul : Std.Commutative mul :=
 -- In the induction proof, there's no need to prefix the constructor with the type name (followed by a .)
 -- In the def and theorem environment, however, this is needed.
 -- by?
-#print mul
 end mine
 -- indent 1 >
