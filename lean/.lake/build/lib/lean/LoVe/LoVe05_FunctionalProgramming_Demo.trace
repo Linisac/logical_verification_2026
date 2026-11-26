@@ -1,0 +1,101 @@
+{"synthetic": false,
+ "outputs":
+ {"o": ["15416809826551042159"],
+  "i": "12165940728780398037",
+  "c": "423061419173407025"},
+ "log":
+ [{"message":
+   ".> LEAN_PATH=/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean /Users/Linisac/.elan/toolchains/leanprover--lean4---v4.24.0/bin/lean /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe05_FunctionalProgramming_Demo.lean -o /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe05_FunctionalProgramming_Demo.olean -i /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe05_FunctionalProgramming_Demo.ilean -c /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe05_FunctionalProgramming_Demo.c --setup /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe05_FunctionalProgramming_Demo.setup.json --json",
+   "level": "trace"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:26:0: inductive Nat : Type\nnumber of parameters: 0\nconstructors:\nNat.zero : ℕ\nNat.succ : ℕ → ℕ",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:155:0: LoVe.RGB.mk (red green blue : ℕ) : RGB",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:156:0: LoVe.RGB.red (self : RGB) : ℕ",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:157:0: LoVe.RGB.green (self : RGB) : ℕ",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:158:0: LoVe.RGB.blue (self : RGB) : ℕ",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:186:0: structure LoVe.RGBA : Type\nnumber of parameters: 0\nparents:\n  LoVe.RGBA.toRGB : RGB\nfields:\n  LoVe.RGB.red : ℕ\n  LoVe.RGB.green : ℕ\n  LoVe.RGB.blue : ℕ\n  LoVe.RGBA.alpha : ℕ\nconstructor:\n  LoVe.RGBA.mk (toRGB : RGB) (alpha : ℕ) : RGBA\nfield notation resolution order:\n  LoVe.RGBA, LoVe.RGB",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:200:0: def LoVe.pureRed : RGB :=\n{ red := 255, green := 0, blue := 0 }",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:201:0: def LoVe.pureGreen : RGB :=\n{ red := 0, green := 255, blue := 0 }",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:202:0: def LoVe.semitransparentGreen : RGBA :=\nhave __src := pureGreen;\n{ toRGB := __src, alpha := 127 }",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:226:0: class Inhabited.{u} (α : Sort u) : Sort (max 1 u)\nnumber of parameters: 1\nfields:\n  Inhabited.default : α\nconstructor:\n  Inhabited.mk.{u} {α : Sort u} (default : α) : Inhabited α",
+   "level": "info"},
+  {"message": "LoVe/LoVe05_FunctionalProgramming_Demo.lean:234:0: 0",
+   "level": "info"},
+  {"message": "LoVe/LoVe05_FunctionalProgramming_Demo.lean:235:0: []",
+   "level": "info"},
+  {"message": "LoVe/LoVe05_FunctionalProgramming_Demo.lean:245:0: 0",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:247:0: List.head.{u} {α : Type u} (as : List α) : as ≠ [] → α",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:260:0: class Std.Associative.{u} {α : Sort u} (op : α → α → α) : Prop\nnumber of parameters: 2\nfields:\n  Std.Associative.assoc : ∀ (a b c : α), op (op a b) c = op a (op b c)\nconstructor:\n  Std.Associative.mk.{u} {α : Sort u} {op : α → α → α} (assoc : ∀ (a b c : α), op (op a b) c = op a (op b c)) :\n    Std.Associative op",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:261:0: class Std.Commutative.{u} {α : Sort u} (op : α → α → α) : Prop\nnumber of parameters: 2\nfields:\n  Std.Commutative.comm : ∀ (a b : α), op a b = op b a\nconstructor:\n  Std.Commutative.mk.{u} {α : Sort u} {op : α → α → α} (comm : ∀ (a b : α), op a b = op b a) : Std.Commutative op",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:269:0: inductive List.{u} : Type u → Type u\nnumber of parameters: 1\nconstructors:\nList.nil : {α : Type u} → List α\nList.cons : {α : Type u} → α → List α → List α",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:319:0: List.map.{u, v} {α : Type u} {β : Type v} (f : α → β) (l : List α) : List β",
+   "level": "info"},
+  {"message": "LoVe/LoVe05_FunctionalProgramming_Demo.lean:356:0: some 3",
+   "level": "info"},
+  {"message": "LoVe/LoVe05_FunctionalProgramming_Demo.lean:357:0: 3",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:364:0: List.zip.{u, v} {α : Type u} {β : Type v} : List α → List β → List (α × β)",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:370:0: List.length.{u_1} {α : Type u_1} : List α → ℕ",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:376:0: Classical.em (p : Prop) : p ∨ ¬p",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:425:0: inductive Tree.{u} : Type u → Type u\nnumber of parameters: 1\nconstructors:\nTree.nil : {α : Type u} → Tree α\nTree.node : {α : Type u} → α → Tree α → Tree α → Tree α",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:480:0: LoVe.Vec.nil {α : Type} : Vec α 0",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe05_FunctionalProgramming_Demo.lean:481:0: LoVe.Vec.cons {α : Type} (a : α) {n : ℕ} (v : Vec α n) : Vec α (n + 1)",
+   "level": "info"}],
+ "inputs":
+ [["LoVe.LoVe05_FunctionalProgramming_Demo:deps",
+   [["deps",
+     [["love/LoVe:extraDep", [["@love:extraDep", "1723"]]],
+      ["imports",
+       [["LoVe.LoVelib transitive imports (legacy)", "11989183081253910886"],
+        ["LoVe.LoVelib:importAllArts", "16837508327688803812"]]]]],
+    ["libs",
+     [["import dynlibs", "1723"],
+      ["package external libraries", "1723"],
+      ["module dynlibs", "1723"],
+      ["module plugins", "1723"]]]]],
+  ["Lean 4.24.0, commit 797c613eb9b6d4ec95db23e3e00af9ac6657f24b",
+   "1165570713881806064"],
+  ["/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe05_FunctionalProgramming_Demo.lean",
+   "4917382563222206201"],
+  ["options", "1723"],
+  ["Module.leanArgs: #[]", "1723"]],
+ "depHash": "12353269806328656039"}

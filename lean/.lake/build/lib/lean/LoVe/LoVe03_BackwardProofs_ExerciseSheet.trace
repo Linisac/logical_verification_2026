@@ -1,20 +1,20 @@
 {"synthetic": false,
  "outputs":
- {"o": ["10876723622931057485"],
-  "i": "12393226846669359768",
+ {"o": ["14444867165708998619"],
+  "i": "6406907478735564754",
   "c": "2547991325796396404"},
  "log":
  [{"message":
    ".> LEAN_PATH=/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean /Users/Linisac/.elan/toolchains/leanprover--lean4---v4.24.0/bin/lean /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe03_BackwardProofs_ExerciseSheet.lean -o /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe03_BackwardProofs_ExerciseSheet.olean -i /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe03_BackwardProofs_ExerciseSheet.ilean -c /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe03_BackwardProofs_ExerciseSheet.c --setup /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe03_BackwardProofs_ExerciseSheet.setup.json --json",
    "level": "trace"},
   {"message":
-   "LoVe/LoVe03_BackwardProofs_ExerciseSheet.lean:63:0: theorem LoVe.BackwardProofs.proj_fst' : ∀ (a : Prop), a → a → a :=\nfun a ha a => ha",
+   "LoVe/LoVe03_BackwardProofs_ExerciseSheet.lean:66:0: theorem LoVe.BackwardProofs.proj_fst' : ∀ (a : Prop), a → a → a :=\nfun a ha x => I a ha",
    "level": "info"},
   {"message":
-   "LoVe/LoVe03_BackwardProofs_ExerciseSheet.lean:129:0: LoVe.mul : ℕ → ℕ → ℕ",
+   "LoVe/LoVe03_BackwardProofs_ExerciseSheet.lean:133:0: LoVe.mul : ℕ → ℕ → ℕ",
    "level": "info"},
   {"message":
-   "LoVe/LoVe03_BackwardProofs_ExerciseSheet.lean:130:0: def LoVe.mul : ℕ → ℕ → ℕ :=\nfun x x_1 =>\n  Nat.brecOn (motive := fun x => ℕ → ℕ) x_1\n    (fun x f x_2 =>\n      (match (motive := ℕ → (x : ℕ) → Nat.below (motive := fun x => ℕ → ℕ) x → ℕ) x_2, x with\n        | m, Nat.zero => fun x => Nat.zero\n        | m, n.succ => fun x => add m (x.1 m))\n        f)\n    x",
+   "LoVe/LoVe03_BackwardProofs_ExerciseSheet.lean:134:0: def LoVe.mul : ℕ → ℕ → ℕ :=\nfun x x_1 =>\n  Nat.brecOn (motive := fun x => ℕ → ℕ) x_1\n    (fun x f x_2 =>\n      (match (motive := ℕ → (x : ℕ) → Nat.below (motive := fun x => ℕ → ℕ) x → ℕ) x_2, x with\n        | m, Nat.zero => fun x => Nat.zero\n        | m, n.succ => fun x => add m (x.1 m))\n        f)\n    x",
    "level": "info"}],
  "inputs":
  [["LoVe.LoVe03_BackwardProofs_ExerciseSheet:deps",
@@ -33,7 +33,7 @@
   ["Lean 4.24.0, commit 797c613eb9b6d4ec95db23e3e00af9ac6657f24b",
    "1165570713881806064"],
   ["/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe03_BackwardProofs_ExerciseSheet.lean",
-   "10528552141987283122"],
+   "2281013337961070653"],
   ["options", "1723"],
   ["Module.leanArgs: #[]", "1723"]],
- "depHash": "17253347199057495993"}
+ "depHash": "17993603108340722809"}

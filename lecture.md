@@ -452,3 +452,391 @@ That's PAT again.
   why `axiom` (and `sorry`) can make the logic inconsistent.
 
 Build with `lake build LoVe.LoVe04_ForwardProofs_ExerciseSheet`.
+
+### Q&A: `zero` vs `Nat.zero` vs `ℕ.zero` (practice.lean)
+
+All behaviour below was checked with this repo's toolchain.
+
+**Background:** the constructors of `inductive Nat` are declared *inside the
+namespace `Nat`*. Their real names are `Nat.zero` and `Nat.succ`, just as
+`List.nil` and `Option.none` live in their types' namespaces. A bare `zero`
+resolves only if you are inside `namespace Nat` or have written `open Nat`.
+`practice.lean` is in `namespace mine`, so neither applies.
+
+**1. Bare `zero`/`succ` in a `def` pattern.**
+- On the right-hand side, `zero` is simply "Unknown identifier `zero`".
+- In a pattern it's worse. A bare identifier that doesn't resolve to a
+  constructor is read as a **new pattern variable**. So `| _, zero => …`
+  matches *every* number, and Lean warns: "Local variable 'zero' resembles
+  constructor 'Nat.zero' – write '.zero' (with a dot) or 'Nat.zero'".
+- `succ n` is an application, so it has to be a constructor. That gives
+  "Invalid pattern: Expected a constructor…".
+
+Short alternatives that work:
+- `.zero` / `.succ n`: the leading dot means "look this name up in the
+  namespace of the expected type", here `Nat`. This also works on the
+  right-hand side: `| _, .zero => .zero`.
+- `open Nat` (in a `section`), then bare `zero`/`succ`.
+- Idiomatic for `Nat` specifically: numerals `0` and `n + 1`.
+
+**2. `ℕ.zero`.** `ℕ` is **notation** for the term `Nat`, not a name or
+namespace. Notation rewrites terms, but namespaces are looked up by name,
+so `ℕ.zero` is read as a name in a nonexistent namespace `ℕ`: "Unknown
+identifier `«ℕ».zero`".
+
+**3. Why `induction … with | zero | succ` *requires* the short names.** The
+alternatives of `induction`/`cases` are not patterns or terms. They are
+**labels** for the cases of the recursor `Nat.rec`, one per constructor.
+Lean already knows from `n` that the type is `Nat`, so it expects the bare
+constructor names. `| Nat.zero => …` is rejected: "Invalid alternative name
+`Nat.zero`: Expected `zero` or `succ`". By contrast, `def`/`match` patterns
+are real terms (constructor applications) and go through ordinary name
+resolution. That's the asymmetry you noticed.
+
+### Follow-up: is the `Nat` in `Nat.zero` the namespace or the type?
+
+**Both, because in Lean they are the same string.** Lean names are
+hierarchical (`Nat.zero` is the name with components `Nat` and `zero`), and
+a **namespace is nothing but a name prefix**. It's not an object in the
+logic. `inductive Nat` declares a constant named `Nat` (the type) and puts
+its constructors and recursor under that prefix: `Nat.zero`, `Nat.succ`,
+`Nat.rec`. So the type's name and the namespace coincide *by convention of
+the `inductive` command*. They aren't the same kind of thing.
+
+Evidence (checked):
+- A namespace can exist with no constant of that name: after
+  `namespace Foo  def bar …  end Foo`, `#check Foo.bar` works but
+  `#check Foo` gives "Unknown identifier `Foo`".
+- You can add to the `Nat` namespace yourself:
+  `def Nat.double (n : ℕ) : ℕ := n + n`.
+- Inside `namespace Nat … end Nat`, bare `zero` and `double` resolve.
+- The link is used *from the type to the namespace*. For `x : Nat`, dot
+  notation `x.double` means `Nat.double x` (`(3 : ℕ).double` evaluates to
+  6), and the shorthand `.zero` with expected type `Nat` means `Nat.zero`.
+  Lean takes the *head constant's name* of the type (`Nat`) and uses it as
+  the prefix.
+
+That also explains `ℕ.zero` failing. `ℕ` is notation that *elaborates to*
+the constant `Nat`, but there's no name `ℕ`, so no prefix `ℕ`. The
+parser reads `ℕ.zero` as a single identifier (Lean shows it as
+`«ℕ».zero`), so the `ℕ` notation never gets a chance to apply.
+
+### Q&A: what is `by?`
+
+`by?` is a Lean-core macro (`Init/Tactics.lean`):
+`by? tacs` ≡ `show_term by tacs`. It runs the tactic block normally *and*
+prints the **proof term the tactics built**, as a clickable "Try this:"
+suggestion that replaces the `by` block with that term. In other words,
+it's PAT made visible: you watch tactics turn into a term. Checked outputs:
+
+    theorem C … := by? intro habc hb ha; apply habc; · exact ha; · exact hb
+      -- Try this: fun habc hb ha => habc ha hb
+    theorem And_swap … := by? intro hab; apply And.intro; · exact And.right hab; · exact And.left hab
+      -- Try this: fun hab => ⟨hab.right, hab.left⟩
+    example (n : Nat) : n + 0 = n := by? simp
+      -- Try this: of_eq_true (Eq.trans (congrArg (fun x => x = n) (add_zero n)) (eq_self n))
+
+Notes:
+- `⟨…, …⟩` is *anonymous constructor* notation (here `And.intro`), and
+  `hab.right` is dot notation for `And.right hab`. That's the
+  namespace-prefix mechanism from the previous Q&A, since `hab : And a b`.
+- `simp`'s terms are unreadable, so `by?` is most useful on short
+  intro/apply/exact proofs.
+- **vs `#print`:** `#print thm` shows the term of a *finished* declaration
+  after the fact. `by?` works on the block in place, offers the replacement,
+  and also works for a sub-block (`show_term tac` inside a proof).
+- The `?` suffix is a convention for "suggest something". **Don't confuse
+  `by?` with `exact?`/`apply?`**, which *search the library* for a lemma
+  closing the goal (e.g. `exact?` on `m + n = n + m` suggests
+  `exact Nat.add_comm m n`). `by?` searches nothing. It only reports what
+  your own tactics produced.
+- Useful for the ch.4 sheet: write a ch.3-style tactic proof, use `by?` to
+  see its term, and compare it with your structured proof.
+
+### Q&A: is `fun … ↦ … show … from …` standard Lean?
+
+Yes. `practice.lean`'s `fst_of_two_props''` (`fun a b : Prop ↦ fun ha : a
+↦ fun _ : b ↦ show a from ha`) compiles in a file with **no imports at all**
+(core `Init` only). `fun`, `↦` (interchangeable with `=>`), the `_` binder,
+and `show … from …` are all core syntax. In the same import-free file,
+the LoVelib version fails at `fix` ("Unknown identifier `fix`"), which
+confirms that `fix`/`assume` are LoVelib-only.
+
+`#print` shows that `show a from ha` is itself sugar:
+`fun a b ha x => have this := ha; this`. So `show P from e` means
+`have this : P := e; this`, a type ascription done via `have`. It's
+erased in effect, but it makes Lean check `e` against `P` (up to
+computation). Standard-Lean style would usually write the multi-binder
+form `fun (a b : Prop) (ha : a) (_ : b) ↦ ha`, i.e. your
+`fst_of_two_props'''`.
+
+---
+
+**2026-11-25**
+
+### Review of the chapter 4 exercise and homework sheets
+
+Both build clean and `sorry`-free. Homework 3.3 (`Peirce_of_DN`,
+`EM_of_Peirce`, `dn_of_em`) uses no axioms. The two Q3 `proof_of_False`
+theorems depend on exactly the intended bad axiom (plus `propext` /
+`Quot.sound` from `simp`).
+
+**"There is an easy way" (HW 1.1, 2.1).** By PAT, a tactical proof is
+already a term, so there are two easy routes:
+1. **The name of a theorem is a proof term** (book §4.2, the
+   `this_time_with_feeling` example). So
+   `theorem about_Impl_term : … := about_Impl` is a legitimate term proof.
+   Checked: it compiles, and so does `weak_peirce_term … := weak_peirce`.
+   That's almost certainly the joke intended.
+2. The honest-but-mechanical route: ask Lean for the term the tactics built
+   (`#print about_Impl`, or `by?`) and paste it. `#print` gives
+   `fun a b hor ha => Or.elim hor (fun hna => False.elim (hna ha)) fun hb => hb`
+   and `fun a b habaab => habaab fun habaa => habaa fun ha => habaab fun haba => ha`.
+   Your hand-written `about_Impl_term` and `weak_peirce_term` are exactly
+   these terms, up to binder annotations. (`about_Impl_term'` is a
+   genuinely different term: it pushes `ha` into each branch.)
+
+**Exercise sheet.**
+- Q1.1–1.3: all correct. `contrapositive` correctly uses `assume ha : a`
+  against a `¬a` goal, because `¬a` is definitionally `a → False`.
+  `forall_and` is clean.
+- 1.4: all three versions correct. The first omits the parentheses around
+  the `Exists.elim` argument. It works because `fun` extends as far right
+  as possible, but the parenthesized `'` version is more robust.
+- Q2: `binomial_square` and `binomial_square₂` are correct. The last step
+  (`add_assoc (a * a)`, `← Nat.two_mul`, `← mul_assoc`) is a nice
+  `ac_rfl`-free finish. `binomial_square₂`'s
+  `Eq.trans (Eq.trans (Eq.trans …))` could also be written
+  `heq1.trans (heq2.trans (heq3.trans heq4))` (dot notation again).
+- Q3: both correct, with nicely chosen instances over `Bool`. Observation:
+  the predicate barely matters.
+  - 3.1's axiom is refuted by *any* type with two distinct elements and any
+    `P` with `P t` true (even `fun _ ↦ True`), because the left-hand side
+    forces every `x` to equal `t`.
+  - 3.2's is refuted by `P := fun _ ↦ False` plus any witness `x ≠ t`,
+    which makes `x = t → P x` hold vacuously.
+  - The `--alternatively: rw []` comment is stale.
+
+**Homework sheet.**
+- Q1, Q2: correct. In 1.2, `( fun hb => hb)` could be
+  `(assume hb : b; hb)` to stick to the requested `fix`/`assume`/`show`
+  style. Cosmetic.
+- Q3.1, 3.2: correct, and they use only the intro/elim rules, as required.
+- Q3.3: correct and non-circular. Naming nit: `dn_of_em` breaks the
+  `DN_of_EM` convention used by the other five.
+
+---
+
+**2026-11-26**
+
+### Q&A: Lean equivalents of HOL4's `m`, `f`, `mm`, `ff`, `fm`, `mf`
+
+(HOL4 cheatsheet: `m` = `Hol_pp.print_apropos`, a subterm-pattern search;
+`f` = `Hol_pp.print_find`, a theorem-name search; the two-letter versions
+chain two searches.) All commands below were checked in this repo.
+
+**Loogle covers all six with one query language.** Filters separated by
+commas are conjoined:
+
+| HOL4 | Loogle filter | example |
+|---|---|---|
+| `f "str"` | `"str"` (substring of the lemma name) | `"two_mul"` |
+| `m ‘pat’` | subterm pattern, `_` = anything, `?a` = named/non-linear | `_ * (_ + _)` |
+| — | conclusion pattern | `\|- _ < _ → _` |
+| — | mentions constant | `List.map` |
+| `mm`/`ff`/`fm`/`mf` | comma-combine any of the above | `"add", ?a * (?b + ?c) = ?a * ?b + ?a * ?c` |
+
+The last query returned `Nat.mul_add`, `Int.mul_add`, `Rat.mul_add`, ….
+
+Three ways to run it:
+- **VS Code**: Command Palette → "Lean 4: Loogle: Search With Loogle…"
+  (command `lean4.loogle.search`, built into the installed extension). It
+  needs no import, so it's the closest thing to having `m`/`f` at hand.
+- **In a file**: `#loogle <query>` after `import Mathlib.Tactic.Common`.
+- **Web**: loogle.lean-lang.org.
+
+Caveats:
+- Loogle queries a **server-side, current Mathlib**, not this repo's pinned
+  Mathlib or LoVe's own definitions (e.g. LoVe's `add`/`mul`). Names can
+  differ slightly between versions. It also needs network access.
+- Gotcha: a constant filter refers to the *constant*, not the notation.
+  `a * b` on ℕ elaborates to `HMul.hMul`, not `Nat.mul`, so
+  `#loogle Nat.mul, …` found nothing. Use a pattern (`_ * _`) instead.
+
+**Offline / local alternatives:**
+- `#find <pattern>` (`Mathlib.Tactic.Common`) is a local `m`, but noisy.
+  `#find _ * (_ + _) = _ * _ + _ * _` hit `mul_add`/`left_distrib`, along
+  with lots of junk that unifies loosely, and then the result cap.
+- `#print prefix Nat.two_mul` (`import Batteries.Tactic.PrintPrefix`) lists
+  every declaration whose name starts with that prefix. It's a local
+  prefix-only `f`.
+- **Name completion** in VS Code: type `Nat.mul_` and press Ctrl+Space.
+  This is the everyday Lean `f`.
+
+**Goal-directed search** (what Lean users reach for most, with no exact
+HOL4-cheatsheet analogue):
+- `exact?` proves the goal from one library lemma. On
+  `a * (b + c) = a * b + a * c` it suggests `exact Nat.mul_add a b c`.
+- `apply?` and `rw?` do the same for apply and rewrite steps. (`rw?`
+  suggested `rw [h]`.)
+- `simp?` runs `simp` and reports the `simp only [...]` lemma list it used.
+
+### Q&A: Loogle query for `a * b = b * a` on ℕ
+
+Checked with `#loogle` from this repo:
+
+| query | result |
+|---|---|
+| `(?a : ℕ) * ?b = ?b * ?a` | exactly `Nat.mul_comm (n m : ℕ) : n * m = m * n` |
+| `⊢ (?a : ℕ) * ?b = ?b * ?a` | same, `Nat.mul_comm` only |
+| `(_ : ℕ) * _ = _ * _` | `Nat.mul_comm`, plus `Nat.mul_assoc`, `Nat.mul_left_comm`, `Nat.eq_of_mul_eq_mul_left`, … |
+| `⊢ ?a * ?b = ?b * ?a` | `Nat/Int/Fin/Rat.mul_comm`, `Lean.Grind.CommSemiring.mul_comm`, … |
+| `?a * ?b = ?b * ?a` | failed (server timeout: too general without `⊢`) |
+
+Lessons:
+- **`?a`/`?b` are essential.** They're non-linear, so `?a` must be the same
+  term in both places. `_` is linear (each `_` independent), so
+  `_ * _ = _ * _` also matches associativity and cancellation lemmas.
+- **The type ascription `(?a : ℕ)` restricts to ℕ.** Without it you get
+  every commutative type.
+- **`⊢` (or `|-`) matches only the conclusion.** It's more precise, and
+  in practice it also keeps the unrestricted query from timing out.
+- `#loogle` prints only the first few hits. The VS Code command and the
+  website show the full list.
+
+`Nat.mul_comm` is the ℕ-specific lemma. The generic Mathlib `mul_comm :
+∀ {G} [CommMagma G] (a b : G), a * b = b * a` also applies to ℕ via type
+classes (checked: `example (a b : ℕ) : a * b = b * a := mul_comm a b`).
+That's the one used in ch.4's `rw [mul_comm b a]`. Type classes are ch.5.
+
+---
+
+**2026-11-26**
+
+## Chapter 5: Functional Programming
+
+(Book pp.57–77.) Most of this chapter (inductive types, structural
+recursion, pattern matching, lists, trees) is ML/HOL4/Agda material you
+know. The genuinely new part is **type classes**. Then there are a handful
+of Lean mechanics around `cases`, induction and `if`. Every behavioural
+claim below was checked against this repo's toolchain.
+
+### 1. Type classes: the new idea
+
+- **What they are:** a `class` is just a `structure`, and an `instance` is
+  a value of that structure *registered* in a global table. An argument
+  written `[C α]` is *instance-implicit*: Lean fills it by **instance
+  search**, a Prolog-like backward search through the registered instances
+  that can chain them. For example, `inferInstance : Inhabited (ℕ → List ℕ)`
+  is found by combining the `Fun.Inhabited` and `List.Inhabited` instances.
+- **Your background:**
+  - Agda's instance arguments `{{…}}` are the closest analogue.
+  - HOL4 has nothing like it. `overload_on` is purely syntactic, and
+    algebra is done with predicates on records (`Group g`).
+  - The book's footnote is apt: Lean's mechanism is closer to Scala's
+    implicits than to Haskell's classes.
+- **Syntactic classes** (`Add`, `Mul`, `Zero`, `One`, …) give notation:
+  `a + b` *is* `HAdd.hAdd a b`, with the instance chosen by type. That's
+  the "constants vs notation" Loogle gotcha from earlier.
+  **Semantic classes** also carry proofs (`Std.Commutative`; Mathlib's
+  `CommMagma`, `Monoid`, `Ring`, …).
+- **This explains the generic `mul_comm`:**
+  `mul_comm : ∀ {G} [CommMagma G] (a b : G), a * b = b * a` works on ℕ
+  because `#synth CommMagma ℕ` finds `Nat.instCommSemigroup.toCommMagma`.
+  The instance is reached through the `extends` hierarchy: one lemma serves
+  every type with an instance. That's Mathlib's whole design (ch.13).
+- **Tools:**
+  - `#synth C τ` shows which instance Lean picks.
+  - `@f …` lets you pass an instance explicitly.
+  - If several instances apply, the most recently declared (or
+    higher-priority) one wins. In the demo, `#synth Inhabited ℕ` returns the
+    demo's own `Nat.Inhabited`, not core's.
+- **`Decidable` is a type class too, and it governs `if`.**
+  `if p then … else …` needs a `Decidable p` instance, so
+  `def g (p : Prop) : ℕ := if p then 1 else 0` fails with "failed to
+  synthesize Decidable p".
+  - That's the computational boundary. A *program* can only branch on
+    decidable propositions. A *proof* may split on any proposition
+    classically (`Classical.em p`, or the idiomatic tactic `by_cases h : p`).
+  - The dependent form `if h : p then … else …` gives you `h : p` /
+    `h : ¬p` in the branches.
+
+### 2. `Bool` vs `Prop`
+
+`Bool` is data with two values (`true`/`false`, `&&`, `||`, `!`), used
+in programs. `Prop` is for specifications. Pattern matching works on
+`Bool`, not on `Prop`. Lean silently coerces between them (`b` becomes
+`b = true`). The book advises not relying on that.
+
+### 3. Structures
+
+`structure RGB where red : ℕ …` is a one-constructor inductive type plus
+projections `RGB.red`.
+- `c.red` is dot notation (the namespace-prefix mechanism again).
+- `{ c with alpha := … }` is functional update.
+- `⟨r, g, b⟩` is the anonymous constructor (you saw it in `by?` output).
+- `extends` adds fields.
+
+This is nearly identical to HOL4 records (`<| red := … |>`, `with`).
+
+### 4. `cases`, constructor facts, and generalizing the induction
+
+- **`cases t`** splits into one case per constructor, without induction
+  hypotheses. Applied to an *equation* between constructors, it uses
+  injectivity and distinctness:
+  - `h : x :: xs = y :: ys` gets unified away (`y := x`, `ys := xs`);
+  - `h : [] = x :: xs` closes the goal outright.
+  `simp` knows the same facts: `simp at h` turns the first `h` into
+  `x = y ∧ xs = ys`. This is HOL4's `list_11` / `NOT_NIL_CONS` being in
+  `srw_ss`.
+- **`induction` does not generalize other variables for you.** In the
+  demo's `length_zip`, plain `induction xs` yields
+  `ih : length (zip xs' ys) = …` for the *same fixed* `ys` (checked), which
+  is useless because the step needs the tail of `ys`.
+  `induction xs generalizing ys` makes it `ih : ∀ys, …`. It's the same
+  trick as quantifying `ys` before `Induct_on` in HOL4.
+  - Pattern-matching proofs avoid this: state the theorem with `∀xs ys`,
+    and the recursive call may take any arguments (`map_zip`).
+  - **Exercise 1.1 is exactly this situation**: the accumulator must be
+    generalized.
+
+### 5. Termination, `axiom`, and testing definitions
+
+- A `def` must terminate. Structural recursion is accepted automatically.
+  `illegal n = illegal n + 1` is rejected (this is HOL4's TFL obligation).
+- The same equation stated with `opaque` + `axiom` *is* accepted and proves
+  `False`. That's ch.4 Q3 again.
+- The book's `fact` (with `| 0 => 0`) is deliberately wrong. It returns 0
+  everywhere, which is a reminder to `#eval` your definitions.
+
+### 6. Mechanics you'll use in the sheet
+
+- **`@[simp] theorem …`** adds the theorem to the simp set. It's HOL4's
+  `Theorem foo[simp]` / `export_rewrites`. Exercise 2.2 does this.
+- **Overlapping patterns are tried top to bottom.** Prefer
+  non-overlapping, constructor-shaped patterns that mirror the definition
+  (`drop`/`take`'s three cases), because proofs then follow the same three
+  cases.
+- **Name clash gotcha:** `open LoVe` *outside* the namespace makes `min`
+  ambiguous between `LoVe.min` and root `Min.min` ("Ambiguous term"). Inside
+  `namespace LoVe … end LoVe`, the local name wins. Keep that in mind for
+  `practice.lean`.
+
+### 7. Dependent inductive types (`Vec`), skim only
+
+These will feel familiar from Agda. The book marks them "not exam
+material". The usual pain applies: `Vec α (m + n)` vs `Vec α (n + m)` are
+not definitionally equal. `match` must also match the index
+(`| _, Vec.cons a u => …`), which `cases` does for you.
+
+**Task:** `lean/LoVe/LoVe05_FunctionalProgramming_ExerciseSheet.lean`.
+- Q1: `reverseAccu`. Generalize over the accumulator in 1.1, derive 1.2,
+  and do 1.3 in one line without induction. 1.4 is a careful paper proof,
+  so state each case's IH and goal.
+- Q2: define `take`, then prove the `@[simp]` lemmas and `drop_drop` /
+  `take_take` / `take_drop`, each with three cases mirroring the
+  definition.
+- Q3: an inductive type of untyped λ-terms. 3.2 (optional) is your first
+  type class *instance* (`Repr`).
+
+Build with `lake build LoVe.LoVe05_FunctionalProgramming_ExerciseSheet`.

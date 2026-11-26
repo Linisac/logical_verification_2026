@@ -1,0 +1,28 @@
+{"synthetic": false,
+ "outputs":
+ {"o": ["8204644060344549680"],
+  "i": "12294912175509291160",
+  "c": "9194404730322733381"},
+ "log":
+ [{"message":
+   ".> LEAN_PATH=/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean /Users/Linisac/.elan/toolchains/leanprover--lean4---v4.24.0/bin/lean /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe04_ForwardProofs_ExerciseSheet.lean -o /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe04_ForwardProofs_ExerciseSheet.olean -i /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe04_ForwardProofs_ExerciseSheet.ilean -c /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe04_ForwardProofs_ExerciseSheet.c --setup /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe04_ForwardProofs_ExerciseSheet.setup.json --json",
+   "level": "trace"}],
+ "inputs":
+ [["LoVe.LoVe04_ForwardProofs_ExerciseSheet:deps",
+   [["deps",
+     [["love/LoVe:extraDep", [["@love:extraDep", "1723"]]],
+      ["imports",
+       [["LoVe.LoVelib transitive imports (legacy)", "11989183081253910886"],
+        ["LoVe.LoVelib:importAllArts", "16837508327688803812"]]]]],
+    ["libs",
+     [["import dynlibs", "1723"],
+      ["package external libraries", "1723"],
+      ["module dynlibs", "1723"],
+      ["module plugins", "1723"]]]]],
+  ["Lean 4.24.0, commit 797c613eb9b6d4ec95db23e3e00af9ac6657f24b",
+   "1165570713881806064"],
+  ["/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe04_ForwardProofs_ExerciseSheet.lean",
+   "9362700807983345970"],
+  ["options", "1723"],
+  ["Module.leanArgs: #[]", "1723"]],
+ "depHash": "10434628252293619464"}

@@ -1,0 +1,42 @@
+{"synthetic": false,
+ "outputs":
+ {"o": ["5266798986716900281"],
+  "i": "9128306158333735138",
+  "c": "7373730019181683802"},
+ "log":
+ [{"message":
+   ".> LEAN_PATH=/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean /Users/Linisac/.elan/toolchains/leanprover--lean4---v4.24.0/bin/lean /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe04_ForwardProofs_HomeworkSheet.lean -o /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe04_ForwardProofs_HomeworkSheet.olean -i /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/lib/lean/LoVe/LoVe04_ForwardProofs_HomeworkSheet.ilean -c /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe04_ForwardProofs_HomeworkSheet.c --setup /Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/.lake/build/ir/LoVe/LoVe04_ForwardProofs_HomeworkSheet.setup.json --json",
+   "level": "trace"},
+  {"message":
+   "LoVe/LoVe04_ForwardProofs_HomeworkSheet.lean:157:0: Or.elim {a b c : Prop} (h : a ∨ b) (left : a → c) (right : b → c) : c",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe04_ForwardProofs_HomeworkSheet.lean:191:0: LoVe.BackwardProofs.Peirce_of_EM : ExcludedMiddle → Peirce",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe04_ForwardProofs_HomeworkSheet.lean:192:0: LoVe.BackwardProofs.DN_of_Peirce : Peirce → DoubleNegation",
+   "level": "info"},
+  {"message":
+   "LoVe/LoVe04_ForwardProofs_HomeworkSheet.lean:193:0: LoVe.BackwardProofs.SorryTheorems.EM_of_DN : DoubleNegation → ExcludedMiddle",
+   "level": "info"}],
+ "inputs":
+ [["LoVe.LoVe04_ForwardProofs_HomeworkSheet:deps",
+   [["deps",
+     [["love/LoVe:extraDep", [["@love:extraDep", "1723"]]],
+      ["imports",
+       [["LoVe.LoVe03_BackwardProofs_ExerciseSheet transitive imports (legacy)",
+         "15077593092358664788"],
+        ["LoVe.LoVe03_BackwardProofs_ExerciseSheet:importAllArts",
+         "170419741245006503"]]]]],
+    ["libs",
+     [["import dynlibs", "1723"],
+      ["package external libraries", "1723"],
+      ["module dynlibs", "1723"],
+      ["module plugins", "1723"]]]]],
+  ["Lean 4.24.0, commit 797c613eb9b6d4ec95db23e3e00af9ac6657f24b",
+   "1165570713881806064"],
+  ["/Users/Linisac/Documents/Computer-Languages-Practice/LEAN/logical_verification_2026/lean/LoVe/LoVe04_ForwardProofs_HomeworkSheet.lean",
+   "6391064423508063895"],
+  ["options", "1723"],
+  ["Module.leanArgs: #[]", "1723"]],
+ "depHash": "11349736071082613868"}

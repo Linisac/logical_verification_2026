@@ -149,6 +149,8 @@ def reverse {α : Type} : List α → List α
   | [] => []
   | x :: xs => reverse xs ++ [x]
 
+-- < indent 2
+namespace sorryTheorems
 theorem add_comm_ (m n : ℕ) :
   add m n = add n m :=
   sorry
@@ -172,6 +174,8 @@ theorem mul_add_ (l m n : ℕ) :
 theorem reverse_reverse {α : Type} (xs : List α) :
   reverse (reverse xs) = xs :=
   sorry
+end sorryTheorems
+-- indent 2 >
 
 -- < indent 2
 namespace test_axiom
@@ -311,11 +315,25 @@ theorem Exists_double_iden :
     apply Exists.intro 0
     rfl
 
+#check Exists.elim
+#check Exists.intro
+#check Or.elim
 theorem exists_or {α : Type} (p q : α → Prop) :
     (∃x, p x ∨ q x) ↔ (∃x, p x) ∨ (∃x, q x) :=
   by
     apply Iff.intro
-    . sorry
+    . intro hexporq
+      apply Exists.elim hexporq
+      intro x pxorqx
+      apply Or.elim pxorqx
+      · intro px
+        apply Or.inl
+        apply Exists.intro
+        exact px
+      · intro qx
+        apply Or.inr
+        apply Exists.intro
+        exact qx
     . intro hexporexq
       apply Or.elim hexporexq
       . intro hexp
@@ -382,6 +400,50 @@ theorem add_zero (n : ℕ) :
 def MyNat_add : MyNat.Nat → MyNat.Nat → MyNat.Nat
   | m, MyNat.Nat.zero => m
   | m, MyNat.Nat.succ n => MyNat.Nat.succ (MyNat_add m n)
+
+/-
+Questions regarding practice.lean: 1. Why can't I write "zero" on line 84 and "succ" on line 85 rather than "Nat.zero" and "Nat.succ", respectively? 2. Why can't I write "ℕ.zero" for "Nat.zero" in this occasion (and like wise for the "succ")? 3. Similarly to 1., why can't I just write "succ" in place of "Nat.succ" while I must write so in the proofs (lines 400-402)?
+
+All three come from the same fact: Nat's constructors are declared inside the namespace Nat, so their full names are Nat.zero and Nat.succ. It's the same as List.nil or Option.none. A bare zero only works if you're inside namespace Nat or have written open Nat, and practice.lean is in namespace mine. I tested each case below in Lean.
+
+1. Bare zero / succ in a def (lines 84–85)
+
+- On the right-hand side, zero is simply "Unknown identifier zero".
+- In a pattern it's more dangerous. If a bare name doesn't resolve to a constructor, Lean treats it as a new variable. So | _, zero => … matches every number, and Lean only warns: "Local variable 'zero' resembles constructor 'Nat.zero' – write '.zero' (with a dot) or 'Nat.zero' to use the constructor."
+- succ n is an application, so it has to be a constructor. It fails with "Invalid pattern: Expected a constructor…".
+
+Shorter forms that do work:
+- .zero / .succ n: the leading dot tells Lean to look the name up in the namespace of the expected type, here Nat. It also works on the right: | _, .zero => .zero.
+- open Nat (inside a section), after which bare zero / succ resolve.
+- 0 and n + 1: the usual way to write Nat patterns, as in your fib.
+
+2. ℕ.zero
+
+ℕ is notation that stands for Nat; it isn't itself a name or a namespace. Notation is replaced in terms, but namespaces are looked up by name. So Lean reads ℕ.zero as zero in a namespace called ℕ, which doesn't exist: "Unknown identifier «ℕ».zero".
+
+3. Why induction … with | zero | succ needs the short names (lines 400–402)
+
+The cases of induction (and cases) aren't patterns or terms. They're labels, one for each constructor of the type you're doing induction on. Lean already knows from n that this is Nat, so it expects just the constructor's own name. Writing | Nat.zero => … is rejected: "Invalid alternative name Nat.zero: Expected zero or succ."
+
+def and match patterns are different. They're real terms built from constructors, so they go through normal name lookup, and the full name (or .zero) is required. That's the difference you noticed.
+
+So you mean, the "Nat" in "Nat.zero" in your response 1. is the name of a namespace rather than of the type "Nat"?
+
+Both. Here they're the same name, but they're different kinds of thing, and I was imprecise.
+
+Lean names have parts, and a namespace is just a shared first part of names. Nat.zero is a name made of Nat and zero. A namespace isn't an object in the logic; it's only a prefix shared by many names. When you write inductive Nat, Lean does two things:
+- It declares a constant named Nat: the type.
+- It names the constructors and recursor with that same prefix: Nat.zero, Nat.succ, Nat.rec.
+
+So the type and the namespace share the name Nat because that's how the inductive command names things. In Nat.zero, Nat is used as the namespace prefix. It just happens to be spelled the same as the type.
+
+I checked each of these in Lean:
+- A namespace can exist without a constant of that name. After namespace Foo  def bar …  end Foo, #check Foo.bar works, but #check Foo gives "Unknown identifier Foo".
+- You can add your own definitions under Nat. def Nat.double (n : ℕ) : ℕ := n + n puts double in the Nat namespace. Inside namespace Nat, bare zero and double both resolve.
+- The type points to its namespace. For x : Nat, writing x.double means Nat.double x, and (3 : ℕ).double evaluates to 6. The .zero shorthand works the same way. Lean takes the type's name, Nat, and uses it as the prefix to look things up.
+
+That's also why ℕ.zero fails. ℕ is notation that turns into the constant Nat, but no name ℕ exists, so there's no prefix ℕ either. Lean reads ℕ.zero as a single name (it shows it as «ℕ».zero), so the ℕ notation never applies. Writing (3 : ℕ).double works because there the type is known to be Nat, so Lean looks in Nat.
+-/
 
 theorem MyNat_add_zero (n : MyNat.Nat) :
     MyNat_add MyNat.Nat.zero n = n :=
@@ -500,8 +562,370 @@ instance Commutative_mul : Std.Commutative mul :=
 -- The following prints all axioms which mul_assoc depends on
 #print axioms mul_assoc
 
--- In the induction proof, there's no need to prefix the constructor with the type name (followed by a .)
--- In the def and theorem environment, however, this is needed.
--- by?
+theorem reverse_cons {α : Type} (x : α) (xs : List α) :
+    reverse (x :: xs) = reverse xs ++ [x] :=
+  by
+    rw [reverse]
+
+namespace reverse_lemmas
+theorem reverse_append {α : Type} (xs ys : List α) :
+    reverse (xs ++ ys) = reverse ys ++ reverse xs :=
+  by
+    induction xs with
+    | nil =>
+        simp
+        rfl
+    | cons x xs ih =>
+        simp
+        rw [reverse]
+        rw [ih]
+        ac_rfl
+
+theorem reverse_reverse {α : Type} (xs : List α) :
+    reverse (reverse xs) = xs :=
+  by
+    induction xs with
+    | nil =>
+        rw [reverse]
+        rfl
+    | cons x xs' ih =>
+        rw [reverse]
+        rw [reverse_append]
+        rw [ih]
+        rfl
+end reverse_lemmas
+/-
+by? runs a tactic block as usual and also shows you the proof term the tactics built. The term appears as a "Try this:" suggestion, and clicking it in VS Code replaces the whole by block with that term. It's built into Lean: by? tacs is shorthand for show_term by tacs.
+
+So it lets you watch "proofs as terms" happen. Here's what it printed for your ch.3 proofs, which I ran:
+
+lean
+theorem C (a b c : Prop) : (a → b → c) → b → a → c := by?
+  intro habc hb ha
+  apply habc
+  · exact ha
+  · exact hb
+-- Try this: fun habc hb ha => habc ha hb
+
+theorem And_swap (a b : Prop) : a ∧ b → b ∧ a := by?
+  intro hab
+  apply And.intro
+  · exact And.right hab
+  · exact And.left hab
+-- Try this: fun hab => ⟨hab.right, hab.left⟩
+
+Things worth knowing:
+- ⟨…, …⟩ is Lean's shorthand for applying a structure's constructor, here And.intro.
+- hab.right is the dot notation from your last question. Because hab : And a b, hab.right means And.right hab.
+- It's most readable on short proofs. On n + 0 = n, by? simp gives of_eq_true (Eq.trans (congrArg (fun x => x = n) (add_zero n)) (eq_self n)). It's correct but hard to read, so by? is most useful with intro/apply/exact.
+- Compared with #print: #print thm shows the term after the whole theorem is finished. by? works right where you're writing and offers the replacement. Inside a proof you can use show_term tac to see the term for just one step.
+- Not to be confused with exact? / apply?. The ? suffix means "suggest something", but those two search the library for a lemma that proves the goal. For example, exact? on m + n = n + m suggests exact Nat.add_comm m n. by? doesn't search anything; it only reports what your own tactics produced.
+-/
+
+
+-- Chapter 4. Forward Proofs
+theorem fst_of_two_props' :
+    ∀ a b : Prop, a → b → a :=
+  fix a b : Prop
+  assume ha : a
+  assume hb : b
+  show a from
+    ha
+
+#print fst_of_two_props'
+
+theorem fst_of_two_props'' :
+    ∀ a b : Prop, a → b → a :=
+  fun a b : Prop ↦
+  fun ha : a ↦
+  fun _ : b ↦
+  show a from
+    ha
+
+#print fst_of_two_props''
+
+theorem fst_of_two_props''' :
+    ∀ a b : Prop, a → b → a :=
+  fun (a b : Prop) (ha : a) (hb : b) ↦ ha
+
+#print fst_of_two_props'''
+
+theorem fst_of_two_props_show (a b : Prop) (ha : a) (hb : b) :
+    a :=
+  show a from
+    ha
+
+theorem prop_comp' (a b c : Prop) (hab : a → b) (hbc : b → c) :
+    a → c :=
+  assume ha : a
+  have hb : b :=
+    hab ha
+  have hc : c :=
+    hbc hb
+  show c from
+    hc
+
+theorem prop_comp'' (a b c : Prop) (hab : a → b) (hbc : b → c) :
+    a → c :=
+  fun ha : a ↦
+  let hb : b := hab ha
+  let hc : c := hbc hb
+  show c from
+    hc
+
+/-
+show c from
+  hc
+can be replaced by hc
+-/
+theorem prop_comp''' (a b c : Prop) (hab : a → b) (hbc : b → c) :
+    a → c :=
+  fun ha : a =>
+  have hb : b :=
+    hab ha
+  have hc : c :=
+    hbc hb
+  hc
+
+theorem prop_comp_inline (a b c : Prop) (hab : a → b) (hbc : b → c) :
+    a → c :=
+  assume ha : a
+  show c from
+    hbc (hab ha)
+
+theorem two_and_two_Eq_four :
+    2 + 2 = 4 :=
+  by
+    simp
+
+theorem this_time_with_feeling :
+    2 + 2 = 4 :=
+  two_and_two_Eq_four
+
+theorem add_comm_zero_left (n : ℕ) :
+    add 0 n = add n 0 :=
+  add_comm 0 n --alternatively: by exact add_comm 0 n
+
+theorem  add_comm_zero_left_by_exact (n : ℕ) :
+    add 0 n = add n 0 :=
+  by exact add_comm 0 n
+
+theorem And_swap' (a b : Prop) :
+    a ∧ b → b ∧ a :=
+  assume hab : a ∧ b
+  have ha : a :=
+    And.left hab
+  have hb : b :=
+    And.right hab
+  show b ∧ a from
+    And.intro hb ha
+
+theorem Or_swap' (a b : Prop) :
+    a ∨ b → b ∨ a :=
+  assume hab : a ∨ b
+  show b ∨ a from
+    Or.elim hab
+      ( assume ha : a
+        show b ∨ a from
+          Or.inr ha)
+      ( assume hb : b
+        Or.inl hb)
+
+theorem Nat_exists_double_iden :
+    ∃n : ℕ, double n = n :=
+  Exists.intro 0
+    ( show double 0 = 0 from
+        by rfl)
+
+theorem Nat_exists_double_iden_no_show :
+    ∃n : ℕ, double n = n :=
+  Exists.intro 0 (by rfl)
+
+theorem modus_ponens (a b : Prop) :
+    (a → b) → a → b :=
+  assume hab : a → b
+  assume ha : a
+  show b from
+    hab ha
+
+theorem not_not_intro (a : Prop) :
+    a → ¬¬a :=
+  assume ha : a
+  assume hna : ¬a
+  show False from
+    hna ha
+
+theorem Forall.one_point {α : Type} (t : α) (P : α → Prop) :
+    (∀x, x = t → P x) ↔ P t :=
+  Iff.intro
+    ( assume hall : ∀x, x = t → P x
+      show P t from
+        by
+          apply hall t
+          rfl)
+    ( assume hp : P t
+      fix x : α
+      assume heq : x = t
+      show P x from
+        by
+          rw [heq]
+          exact hp)
+
+theorem beast_666 (beast : ℕ) :
+    (∀n, n = 666 → beast ≥ n) ↔ beast ≥ 666 :=
+  Forall.one_point 666 (fun m => beast ≥ m)
+  -- alternatively: Forall.one_point _ _
+
+theorem beast_666' (beast : ℕ) :
+    (∀n, n = 666 → beast ≥ n) ↔ beast ≥ 666 :=
+  Forall.one_point _ _
+
+theorem Exists.one_point {α : Type} (t : α) (P : α → Prop) :
+    (∃x : α, x = t ∧ P x) ↔ P t :=
+  Iff.intro
+    ( assume hex : ∃x : α, x = t ∧ P x
+      show P t from
+        Exists.elim hex
+          ( fix x : α
+            assume hand : x = t ∧ P x
+            have hxt : x = t :=
+              And.left hand
+            have hpx : P x :=
+              And.right hand
+            show P t from
+              by
+                rw [← hxt]
+                exact hpx))
+    ( assume hp : P t
+      show ∃x : α, x = t ∧ P x from
+        Exists.intro t
+          ( have tt : t = t :=
+              rfl
+            show t = t ∧ P t from
+              And.intro tt hp))
+
+theorem Exists.one_point' {α : Type} (t : α) (P : α → Prop) :
+    (∃x, x = t ∧ P x) ↔ P t :=
+  Iff.intro
+    ( assume hex : ∃x, x = t ∧ P x
+      show P t from
+        Exists.elim hex
+        fix x : α
+        assume hxeqp : x = t ∧ P x
+        have hxeq : x = t :=
+          And.left hxeqp
+        have hxp : P x :=
+          And.right hxeqp
+        Eq.subst hxeq hxp)
+    ( assume hp : P t
+      Exists.intro t
+        ( And.intro (Eq.refl t) hp))
+
+theorem Exists.one_point'' {α : Type} (t : α) (P : α → Prop) :
+    (∃x, x = t ∧ P t) ↔ P t :=
+  Iff.intro
+    ( assume hex : ∃x, x = t ∧ P t
+      show P t from
+        by
+          apply Exists.elim hex
+          intro x
+          intro hxeqp
+          exact And.right hxeqp)
+    ( assume hp : P t
+      show ∃x, x = t ∧ P t from
+        by
+          apply Exists.intro t
+          apply And.intro
+          · rfl
+          · exact hp)
+
+theorem two_mul_example (m n : ℕ) :
+    2 * m + n = m + n + m :=
+  calc
+    2 * m + n = m + m + n :=
+      by rw [Nat.two_mul]
+    _ = m + n + m :=
+      by ac_rfl
+
+  /-
+  by
+    calc
+    2 * m + n = m + m + n :=
+      by rw [Nat.two_mul]
+    _ = m + n + m :=
+      by ac_rfl
+  -/
+
+theorem two_mul_example_have (m n : ℕ) :
+    2 * m + n = m + n + m :=
+  have hmul : 2 * m + n = m + m + n :=
+    by rw [Nat.two_mul]
+  have hcomm : m + m + n = m + n + m :=
+    by ac_rfl
+  show _ from
+    Eq.trans hmul hcomm
+
+theorem prop_comp_tactical (a b c : Prop) (hab : a → b)
+    (hbc : b → c) :
+    a → c :=
+  by
+    intro ha
+    have hb : b :=
+      hab ha
+    let c' := c
+    have hc : c' :=
+      hbc hb
+    exact hc
+
+#check (fun α : Type => α → α)
+
+theorem reverse_append {α : Type} :
+    ∀xs ys : List α,
+      reverse (xs ++ ys) = reverse ys ++ reverse xs
+  | [], ys => by simp [reverse]
+  | x :: xs, ys => by simp [reverse, reverse_append xs]
+
+theorem reverse_append_tactical {α : Type} (xs ys : List α) :
+    reverse (xs ++ ys) = reverse ys ++ reverse xs :=
+  by
+    induction xs with
+    | nil => simp [reverse]
+    | cons x xs' ih => simp [reverse, ih]
+
+#loogle "mul", (?a : ℕ) * ?b = ?b * ?a
+
+theorem And_swap'' (a b : Prop) :
+    a ∧ b → b ∧ a :=
+  fun hab : a ∧ b =>
+  And.intro (And.right hab) (And.left hab)
+
+theorem And_swap_tactical (a b : Prop) :
+    a ∧ b → b ∧ a :=
+  by
+    intro hab
+    apply And.intro
+    · apply And.right
+      exact hab
+    · apply And.left
+      exact hab
+
+#print And_swap
+#print And_swap'
+#print And_swap''
+#print And_swap_tactical
+
+theorem reverse_reverse {α : Type} :
+    ∀xs : List α, reverse (reverse xs) = xs
+  | [] => by rfl
+  | x :: xs => by simp [reverse, reverse_append, reverse_reverse xs]
+  /- alternative:
+  :=
+  by
+    intro xs'
+    induction xs' with
+    | nil => rfl
+    | cons x xs ih => simp [reverse, reverse_append, ih]
+  -/
+
 end mine
 -- indent 1 >
